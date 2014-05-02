@@ -17,3 +17,5 @@ typedef struct mstring* mstring;
 mstring mstr(const char* c_str);
 
 void mdestroy(mstring m_str);
+
+mstring mconcat(mstring s1, mstring s2);
