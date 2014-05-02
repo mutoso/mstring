@@ -19,3 +19,5 @@ mstring mstr(const char* c_str);
 void mdestroy(mstring m_str);
 
 mstring mconcat(mstring s1, mstring s2);
+
+mstring mappend(mstring s1, char* s2);
