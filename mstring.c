@@ -124,6 +124,44 @@ mstring mappend(mstring s1, const char* s2)
     }
 }
 
+mstring mprepend(mstring m_str, const char* prefix)
+{
+    if (!m_str || !prefix)
+    {
+        return NULL;
+    }
+
+    if (!m_str->str)
+    {
+        return NULL;
+    }
+
+    mstring out_str = malloc(sizeof(struct mstring));
+    if (out_str)
+    {
+        out_str->len = strlen(prefix) + m_str->len;
+        out_str->str = calloc(1, out_str->len + 1);
+
+        if (out_str->str)
+        {
+            strncat(out_str->str, prefix, strlen(prefix));
+            strncat(out_str->str, m_str->str, m_str->len);
+
+            out_str->str[out_str->len] = '\0';
+            return out_str;
+        }
+        else
+        {
+            free(out_str);
+            return NULL;
+        }
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
 mstring msubstr(mstring m_str, size_t start, size_t len)
 {
     /* validate input */
