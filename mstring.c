@@ -7,6 +7,11 @@
 
 mstring mstr(const char* c_str)
 {
+    if (!c_str)
+    {
+        return NULL;
+    }
+
     mstring out_str = malloc(sizeof(struct mstring));
     if (out_str)
     {
@@ -45,6 +50,16 @@ void mdestroy(mstring m_str)
 
 mstring mconcat(mstring s1, mstring s2)
 {
+    if (!s1 || !s2)
+    {
+        return NULL;
+    }
+
+    if (!s1->str || !s2->str)
+    {
+        return NULL;
+    }
+
     mstring out_str = malloc(sizeof(struct mstring));
     if (out_str)
     {
@@ -71,8 +86,18 @@ mstring mconcat(mstring s1, mstring s2)
     }
 }
 
-mstring mappend(mstring s1, char* s2)
+mstring mappend(mstring s1, const char* s2)
 {
+    if (!s1 || !s2)
+    {
+        return NULL;
+    }
+
+    if (!s1->str)
+    {
+        return NULL;
+    }
+
     mstring out_str = malloc(sizeof(struct mstring));
     if (out_str)
     {
