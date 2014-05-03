@@ -98,3 +98,56 @@ mstring mappend(mstring s1, char* s2)
         return NULL;
     }
 }
+
+mstring msubstr(mstring m_str, size_t start, size_t len)
+{
+    /* validate input */
+    if (!m_str)
+    {
+        return NULL;
+    }
+    if (!m_str->str)
+    {
+        return NULL;
+    }
+
+    /* if start is outside of the string, return an empty string */
+    if (start >= m_str->len)
+    {
+        return mstr("");
+    }
+
+    /* if len goes past the end of the string, stop at the end */
+    if (start + len >= m_str->len)
+    {
+        len = m_str->len - start;
+    }
+
+    mstring substring = malloc(sizeof(struct mstring));
+    if (substring)
+    {
+        substring->len = len;
+        substring->str = calloc(1, substring->len + 1);
+
+        if (substring->str)
+        {
+            for (size_t i = 0; i < len; i++)
+            {
+                substring->str[i] = m_str->str[start+i];
+            }
+
+            substring->str[substring->len] = '\0';
+            return substring;
+        }
+        else
+        {
+            free(substring);
+            return NULL;
+        }
+    }
+    else
+    {
+        return NULL;
+    }
+
+}

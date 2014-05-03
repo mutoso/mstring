@@ -21,3 +21,5 @@ void mdestroy(mstring m_str);
 mstring mconcat(mstring s1, mstring s2);
 
 mstring mappend(mstring s1, char* s2);
+
+mstring msubstr(mstring m_str, size_t start, size_t len);
