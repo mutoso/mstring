@@ -176,3 +176,18 @@ mstring msubstr(mstring m_str, size_t start, size_t len)
     }
 
 }
+
+bool mequals(mstring s1, mstring s2)
+{
+    if (!s1 || !s2)
+    {
+        return false;
+    }
+
+    if (!s1->str || !s2->str)
+    {
+        return false;
+    }
+
+    return strcmp(s1->str, s2->str) == 0;
+}
