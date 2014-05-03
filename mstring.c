@@ -191,3 +191,17 @@ bool mequals(mstring s1, mstring s2)
 
     return strcmp(s1->str, s2->str) == 0;
 }
+
+mstring mcopy(mstring m_str)
+{
+    if (!m_str)
+    {
+        return NULL;
+    }
+    if (!m_str->str)
+    {
+        return NULL;
+    }
+
+    return mstr(m_str->str);
+}
