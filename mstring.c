@@ -48,7 +48,49 @@ void mdestroy(mstring m_str)
     }
 }
 
-mstring mconcat(mstring s1, mstring s2)
+bool mconcat(mstring s1, mstring s2)
+{
+    if (!s1 || !s2)
+    {
+        return NULL;
+    }
+
+    if (!s1->str || !s2->str)
+    {
+        return NULL;
+    }
+
+    mstring out_str = malloc(sizeof(struct mstring));
+    if (out_str)
+    {
+        out_str->len = s1->len + s2->len;
+        out_str->str = calloc(1, out_str->len + 1);
+
+        if (out_str->str)
+        {
+            strncat(out_str->str, s1->str, s1->len);
+            strncat(out_str->str, s2->str, s2->len);
+
+            out_str->str[out_str->len] = '\0';
+            free(s1->str);
+            s1->str = out_str->str;
+            s1->len = out_str->len;
+            free(out_str);
+            return true;
+        }
+        else
+        {
+            free(out_str);
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+mstring mconcat_new(mstring s1, mstring s2)
 {
     if (!s1 || !s2)
     {
@@ -86,7 +128,49 @@ mstring mconcat(mstring s1, mstring s2)
     }
 }
 
-mstring mappend(mstring s1, const char* s2)
+bool mappend(mstring s1, const char* s2)
+{
+    if (!s1 || !s2)
+    {
+        return false;
+    }
+
+    if (!s1->str)
+    {
+        return false;
+    }
+
+    mstring out_str = malloc(sizeof(struct mstring));
+    if (out_str)
+    {
+        out_str->len = s1->len + strlen(s2);
+        out_str->str = calloc(1, out_str->len + 1);
+
+        if (out_str->str)
+        {
+            strncat(out_str->str, s1->str, s1->len);
+            strncat(out_str->str, s2, strlen(s2));
+
+            out_str->str[out_str->len] = '\0';
+            free(s1->str);
+            s1->str = out_str->str;
+            s1->len = out_str->len;
+            free(out_str);
+            return true;
+        }
+        else
+        {
+            free(out_str);
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+mstring mappend_new(mstring s1, const char* s2)
 {
     if (!s1 || !s2)
     {
@@ -124,7 +208,49 @@ mstring mappend(mstring s1, const char* s2)
     }
 }
 
-mstring mprepend(mstring m_str, const char* prefix)
+bool mprepend(mstring m_str, const char* prefix)
+{
+    if (!m_str || !prefix)
+    {
+        return false;
+    }
+
+    if (!m_str->str)
+    {
+        return false;
+    }
+
+    mstring out_str = malloc(sizeof(struct mstring));
+    if (out_str)
+    {
+        out_str->len = strlen(prefix) + m_str->len;
+        out_str->str = calloc(1, out_str->len + 1);
+
+        if (out_str->str)
+        {
+            strncat(out_str->str, prefix, strlen(prefix));
+            strncat(out_str->str, m_str->str, m_str->len);
+
+            out_str->str[out_str->len] = '\0';
+            free(m_str->str);
+            m_str->str = out_str->str;
+            m_str->len = out_str->len;
+            free(out_str);
+            return true;
+        }
+        else
+        {
+            free(out_str);
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+mstring mprepend_new(mstring m_str, const char* prefix)
 {
     if (!m_str || !prefix)
     {
