@@ -294,3 +294,134 @@ mstring mcopy(mstring m_str)
 
     return mstr(m_str->str);
 }
+
+int mfind(mstring haystack, const char* needle)
+{
+    char* pch = strstr(haystack->str, needle);
+    if (pch)
+    {
+        return pch - haystack->str;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+bool mreplace(mstring haystack, const char* needle, const char* replacement)
+{
+    mstring out_str = mreplace_new(haystack, needle, replacement);
+    if (out_str)
+    {
+        free(haystack->str);
+        haystack->str = out_str->str;
+        haystack->len = out_str->len;
+        free(out_str);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+mstring mreplace_new(mstring haystack, const char* needle, const char* replacement)
+{
+    /*
+     * indexofneedle marks the beginning of the needle
+     * start marks the start of the section after the (current) needle
+     */
+
+    int start = 0;
+
+    /* get pointer to first instance of needle in haystack */
+    char* pch = strstr(haystack->str, needle);
+
+    if (!pch)
+    {
+        return NULL;
+    }
+
+    mstring out_str = mstr("");
+
+    /* subtract the memory addresses to get an index */
+    size_t indexofneedle = pch - haystack->str;
+    /* go from the start of the part after the needle
+     * or if it's the first result start at index 0
+     * and copy up to the next needle */
+    char between[indexofneedle - start + 1];
+    strncpy(between, haystack->str+start, indexofneedle - start);
+    between[indexofneedle - start] = '\0';
+    /* append the non-needle part of the string to the output */
+    mappend(out_str, between);
+    /* and put the replacement instead of the needle */
+    mappend(out_str, replacement);
+    /* get the index of the next part after the needle */
+    start = indexofneedle + strlen(needle);
+    /* append everything that's after the needle */
+    mappend(out_str, haystack->str+start);
+
+    return out_str;
+}
+
+bool mreplace_all(mstring haystack, const char* needle, const char* replacement)
+{
+    mstring out_str = mreplace_all_new(haystack, needle, replacement);
+    if (out_str)
+    {
+        free(haystack->str);
+        haystack->str = out_str->str;
+        haystack->len = out_str->len;
+        free(out_str);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+mstring mreplace_all_new(mstring haystack, const char* needle, const char* replacement)
+{
+    /*
+     * indexofneedle marks the beginning of the needle
+     * start marks the start of the section after the (current) needle
+     */
+
+    int start = 0;
+    char* between;
+
+    /* get pointer to first instance of needle in haystack */
+    char* pch = strstr(haystack->str, needle);
+
+    if (!pch)
+    {
+        return NULL;
+    }
+
+    mstring out_str = mstr("");
+    while (pch)
+    {
+        /* subtract the memory addresses to get an index */
+        size_t indexofneedle = pch - haystack->str;
+        /* go from the start of the part after the needle
+         * or if it's the first result start at index 0
+         * and copy up to the next needle */
+        between = malloc(indexofneedle - start + 1);
+        strncpy(between, haystack->str+start, indexofneedle - start);
+        between[indexofneedle - start] = '\0';
+        /* append the non-needle part of the string to the output */
+        mappend(out_str, between);
+        /* and put the replacement instead of the needle */
+        mappend(out_str, replacement);
+        /* find next needle */
+        pch = strstr(pch+strlen(needle), needle);
+        /* get the index of the next part after the needle */
+        start = indexofneedle + strlen(needle);
+        free(between);
+    }
+    /* append everything that's after the last needle */
+    mappend(out_str, haystack->str+start);
+
+    return out_str;
+}

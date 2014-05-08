@@ -36,3 +36,13 @@ mstring msubstr(mstring m_str, size_t start, size_t len);
 bool mequals(mstring s1, mstring s2);
 
 mstring mcopy(mstring m_str);
+
+int mfind(mstring haystack, const char* needle);
+
+bool mreplace(mstring haystack, const char* needle, const char* replacement);
+
+mstring mreplace_new(mstring haystack, const char* needle, const char* replacement);
+
+bool mreplace_all(mstring haystack, const char* needle, const char* replacement);
+
+mstring mreplace_all_new(mstring haystack, const char* needle, const char* replacement);
